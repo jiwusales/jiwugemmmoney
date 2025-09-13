@@ -3,82 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>吉物錢錢計算機</title>
+  <title>代購成本計算機</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f9f9f9;
       padding: 20px;
-      display: flex;
-      justify-content: center; /* 水平置中容器 */
-      align-items: flex-start; /* 垂直方向靠上，可改center讓整頁垂直置中 */
-      min-height: 100vh;
     }
     h1 {
       text-align: center;
-      width: 100%;
       margin-bottom: 20px;
     }
     .calculator {
       max-width: 400px;
-      width: 100%;
+      margin: auto;
       padding: 20px;
       background: #fff;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      align-items: center; /* 內容水平置中 */
     }
     label {
       display: block;
       margin-top: 10px;
-      width: 100%;
-      text-align: left; /* label文字靠左，如果要置中改center */
     }
     input {
       width: 100%;
-      max-width: 300px; /* 限制輸入框寬度 */
       padding: 8px;
       margin-top: 5px;
       border: 1px solid #ddd;
       border-radius: 6px;
       font-size: 16px;
-      text-align: center; /* 輸入文字置中 */
     }
     .result {
       margin-top: 20px;
       padding: 15px;
-      width: 100%;
-      max-width: 300px;
       background: #f1f1f1;
       border-radius: 8px;
-      text-align: center; /* 結果文字置中 */
     }
     .result p {
       margin: 6px 0;
-      font-size: 18px;
     }
   </style>
 </head>
 <body>
-  <div>
-    <h1>代購成本計算機</h1>
-    <div class="calculator">
-      <label>日幣原價：</label>
-      <input type="text" id="yen" placeholder="輸入商品日幣價格" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+  <h1>代購成本計算機</h1>
+  <div class="calculator">
+    <label>日幣原價：</label>
+    <input type="text" id="yen" placeholder="輸入商品日幣價格" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
 
-      <label>現在匯率：</label>
-      <input type="text" id="currentRate" placeholder="例如 0.22" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+    <label>現在匯率：</label>
+    <input type="text" id="currentRate" placeholder="例如 0.22" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
 
-      <label>代購匯率：</label>
-      <input type="text" id="agencyRate" placeholder="例如 0.25" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+    <label>代購匯率：</label>
+    <input type="text" id="agencyRate" placeholder="例如 0.25" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
 
-      <div class="result">
-        <p><strong>成本：</strong><span id="cost">0</span> 元</p>
-        <p><strong>售價：</strong><span id="sale">0</span> 元</p>
-        <p><strong>利潤：</strong><span id="profit">0</span> 元</p>
-      </div>
+    <div class="result">
+      <p><strong>成本：</strong><span id="cost">0</span> 元</p>
+      <p><strong>售價：</strong><span id="sale">0</span> 元</p>
+      <p><strong>利潤：</strong><span id="profit">0</span> 元</p>
     </div>
   </div>
 
