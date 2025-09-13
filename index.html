@@ -70,7 +70,7 @@
     <input type="text" id="agencyRate" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
 
     <label>運費(NTD$)：</label>
-    <input type="text" id="shippingFee" placeholder="輸入運費(NTD$)" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+    <input type="text" id="shippingFee" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
 
     <div class="result">
       <p><strong>成本：</strong><span id="cost">0</span> 元</p>
