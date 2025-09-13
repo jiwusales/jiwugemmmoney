@@ -5,36 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>代購成本計算機</title>
   <style>
- body {
-  font-family: Arial, sans-serif;
-  background: #f9f9f9;
-  padding: 20px;
-  margin: 0;
-  box-sizing: border-box;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-*, *::before, *::after {
-  box-sizing: inherit;
-}
-
-.calculator {
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+      margin: 0;
+    }
 
     h1 {
       text-align: center;
       margin-bottom: 20px;
     }
-     label {
+
+    .calculator {
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    label {
       display: block;
       margin-top: 10px;
     }
+
     input {
       width: 100%;
       padding: 8px;
@@ -43,12 +44,14 @@
       border-radius: 6px;
       font-size: 16px;
     }
+
     .result {
       margin-top: 20px;
       padding: 15px;
       background: #f1f1f1;
       border-radius: 8px;
     }
+
     .result p {
       margin: 6px 0;
     }
@@ -66,6 +69,9 @@
     <label>代購匯率：</label>
     <input type="text" id="agencyRate" placeholder="例如 0.25" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
 
+    <label>運費：</label>
+    <input type="text" id="shippingFee" placeholder="輸入運費" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+
     <div class="result">
       <p><strong>成本：</strong><span id="cost">0</span> 元</p>
       <p><strong>售價：</strong><span id="sale">0</span> 元</p>
@@ -78,10 +84,11 @@
       const yen = parseFloat(document.getElementById("yen").value) || 0;
       const currentRate = parseFloat(document.getElementById("currentRate").value) || 0;
       const agencyRate = parseFloat(document.getElementById("agencyRate").value) || 0;
+      const shippingFee = parseFloat(document.getElementById("shippingFee").value) || 0;
 
       const cost = Math.ceil(yen * currentRate);
       const sale = Math.ceil(yen * agencyRate);
-      const profit = Math.ceil(sale - cost);
+      const profit = Math.ceil(sale - cost - shippingFee);
 
       document.getElementById("cost").textContent = cost;
       document.getElementById("sale").textContent = sale;
