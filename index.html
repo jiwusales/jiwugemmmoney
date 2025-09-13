@@ -58,19 +58,19 @@
   </style>
 </head>
 <body>
-  <h1>代購成本計算機</h1>
+  <h1>吉物錢錢計算機</h1>
   <div class="calculator">
-    <label>原價：</label>
-    <input type="text" id="yen" placeholder="輸入商品定價" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+    <label>原價(¥)：</label>
+    <input type="text" id="yen" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
 
     <label>現在匯率：</label>
-    <input type="text" id="currentRate" placeholder="例如 0.22" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+    <input type="text" id="currentRate" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
 
     <label>代購匯率：</label>
-    <input type="text" id="agencyRate" placeholder="例如 0.25" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+    <input type="text" id="agencyRate" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
 
-    <label>運費：</label>
-    <input type="text" id="shippingFee" placeholder="輸入運費" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+    <label>運費(NTD$)：</label>
+    <input type="text" id="shippingFee" placeholder="輸入運費(NTD$)" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
 
     <div class="result">
       <p><strong>成本：</strong><span id="cost">0</span> 元</p>
