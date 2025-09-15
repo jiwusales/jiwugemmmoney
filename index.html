@@ -13,18 +13,18 @@ body {
   padding: 0;
   display: flex;
   justify-content: center;
-  padding-top: 20px; /* 頂部留白 */
+  padding-top: 20px;
 }
 
 /* 卡片 */
 .calculator {
   max-width: 400px;
-  width: 90%;            /* 左右留白 */
+  width: 90%;
   background: #fff;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  min-height: 520px;     /* 固定高度，切換內容不跳 */
+  min-height: 520px;
 }
 
 /* 標題 */
@@ -44,14 +44,14 @@ h1 { text-align: center; margin-bottom: 20px; }
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  background: #ddd; /* 淺灰 */
+  background: #ddd;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background 0.2s;
 }
 .mode-switch button.active {
-  background: #555; /* 深灰 */
+  background: #555;
   color: #fff;
 }
 
@@ -144,7 +144,9 @@ function switchCurrency(type){
 function calculate(){
   let cost=0, price=0, profit=0;
 
-  if(document.getElementById("jpySection").classList.contains("active")){
+  const jpyActive = document.getElementById("jpySection").classList.contains("active");
+
+  if(jpyActive){
     const yen = parseFloat(document.getElementById("yen").value)||0;
     const currentRate = parseFloat(document.getElementById("currentRate").value)||0;
     const agencyRate = parseFloat(document.getElementById("agencyRate").value)||0;
@@ -158,17 +160,17 @@ function calculate(){
     const rmb = parseFloat(document.getElementById("rmbPrice").value)||0;
     const rate = parseFloat(document.getElementById("exchangeRate").value)||0;
     const fee = (parseFloat(document.getElementById("fee").value)||0)/100;
-    const profitInput = parseFloat(document.getElementById("profit").value)||0;
+    const profitInput = parseFloat(document.getElementById("profit").value)||0; // 可留空
     const shipping = parseFloat(document.getElementById("shipping").value)||0;
 
     cost = Math.ceil(rmb*(1+fee)*rate);
     price = Math.ceil(cost + shipping + profitInput);
-    profit = Math.ceil(profitInput);
+    profit = null; // 不顯示利潤
   }
 
   document.getElementById("cost").innerText = "成本：" + cost;
   document.getElementById("price").innerText = "售價：" + price;
-  document.getElementById("profitResult").innerText = "利潤：" + profit;
+  document.getElementById("profitResult").innerText = profit !== null ? "利潤：" + profit : "";
 }
 </script>
 
