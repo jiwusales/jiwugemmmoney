@@ -12,8 +12,17 @@ body {
   margin: 0;
   padding: 0;
   display: flex;
-  justify-content: center;
-  padding-top: 20px;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px; /* 頂部留白 */
+}
+
+/* 標題 */
+h1 {
+  margin: 0 0 20px 0;
+  font-size: 28px;
+  text-align: center;
+  color: #333;
 }
 
 /* 卡片 */
@@ -22,13 +31,12 @@ body {
   width: 90%;
   background: #fff;
   border-radius: 12px;
-  padding: 20px;
+  padding: 30px; /* 統一上下左右留白 */
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   min-height: 520px;
+  display: flex;
+  flex-direction: column;
 }
-
-/* 標題 */
-h1 { text-align: center; margin-bottom: 20px; }
 
 /* 切換按鈕 */
 .mode-switch {
@@ -82,9 +90,9 @@ input {
 </head>
 <body>
 
-<div class="calculator">
-  <h1>吉物錢錢計算機</h1>
+<h1>吉物錢錢計算機</h1>
 
+<div class="calculator">
   <div class="mode-switch">
     <button id="btnJPY" class="active" onclick="switchCurrency('JPY')">🇯🇵</button>
     <button id="btnCNY" onclick="switchCurrency('CNY')">🇨🇳</button>
@@ -160,12 +168,11 @@ function calculate(){
     const rmb = parseFloat(document.getElementById("rmbPrice").value)||0;
     const rate = parseFloat(document.getElementById("exchangeRate").value)||0;
     const fee = (parseFloat(document.getElementById("fee").value)||0)/100;
-    const profitInput = parseFloat(document.getElementById("profit").value)||0; // 可留空
     const shipping = parseFloat(document.getElementById("shipping").value)||0;
 
     cost = Math.ceil(rmb*(1+fee)*rate);
-    price = Math.ceil(cost + shipping + profitInput);
-    profit = null; // 不顯示利潤
+    price = Math.ceil(cost + shipping);
+    profit = null; // 人民幣不顯示利潤
   }
 
   document.getElementById("cost").innerText = "成本：" + cost;
