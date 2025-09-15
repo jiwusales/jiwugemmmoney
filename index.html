@@ -161,14 +161,14 @@ function calculate(){
     const profitInput = parseFloat(document.getElementById("profit").value)||0;
     const shipping = parseFloat(document.getElementById("shipping").value)||0;
 
-    cost = rmb*(1+fee)*rate;
-    price = cost + shipping + profitInput;
-    profit = profitInput;
+    cost = Math.ceil(rmb*(1+fee)*rate);
+    price = Math.ceil(cost + shipping + profitInput);
+    profit = Math.ceil(profitInput);
   }
 
-  document.getElementById("cost").innerText = "成本："+cost.toFixed(2);
-  document.getElementById("price").innerText = "售價："+price.toFixed(2);
-  document.getElementById("profitResult").innerText = "利潤："+profit.toFixed(2);
+  document.getElementById("cost").innerText = "成本：" + cost;
+  document.getElementById("price").innerText = "售價：" + price;
+  document.getElementById("profitResult").innerText = "利潤：" + profit;
 }
 </script>
 
