@@ -9,22 +9,28 @@
 body {
   font-family: Arial, sans-serif;
   background: #f9f9f9;
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
+  padding-top: 20px; /* 頂部留白 */
 }
+
+/* 卡片 */
 .calculator {
   max-width: 400px;
-  width: 100%;
+  width: 90%;            /* 左右留白 */
   background: #fff;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  min-height: 520px; /* 固定高度 */
+  min-height: 520px;     /* 固定高度，切換內容不跳 */
 }
+
+/* 標題 */
 h1 { text-align: center; margin-bottom: 20px; }
+
+/* 切換按鈕 */
 .mode-switch {
   display: flex;
   justify-content: center;
@@ -38,16 +44,18 @@ h1 { text-align: center; margin-bottom: 20px; }
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  background: #ddd;
+  background: #ddd; /* 淺灰 */
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background 0.2s;
 }
 .mode-switch button.active {
-  background: #555;
+  background: #555; /* 深灰 */
   color: #fff;
 }
+
+/* 輸入欄位 */
 label { display: block; margin-top: 10px; }
 input {
   width: 100%;
@@ -57,6 +65,8 @@ input {
   border-radius: 6px;
   font-size: 16px;
 }
+
+/* 結果區 */
 .result {
   margin-top: 20px;
   padding: 15px;
@@ -64,60 +74,70 @@ input {
   border-radius: 8px;
 }
 .result p { margin: 6px 0; }
-.section { display: none; } /* 初始隱藏所有幣種 */
+
+/* 幣種區塊 */
+.section { display: none; }
 .section.active { display: block; }
 </style>
 </head>
 <body>
+
 <div class="calculator">
-<h1>吉物錢錢計算機</h1>
-<div class="mode-switch">
-  <button id="btnJPY" class="active" onclick="switchCurrency('JPY')">🇯🇵</button>
-  <button id="btnCNY" onclick="switchCurrency('CNY')">🇨🇳</button>
-</div>
+  <h1>吉物錢錢計算機</h1>
 
-<!-- 日幣 -->
-<div id="jpySection" class="section active">
-  <label>原價（¥）：</label>
-  <input type="text" id="yen" oninput="calculate()">
-  <label>現在匯率：</label>
-  <input type="text" id="currentRate" oninput="calculate()">
-  <label>代購匯率：</label>
-  <input type="text" id="agencyRate" oninput="calculate()">
-  <label>運費（NTD$）：</label>
-  <input type="text" id="shippingFee" oninput="calculate()">
-</div>
+  <div class="mode-switch">
+    <button id="btnJPY" class="active" onclick="switchCurrency('JPY')">🇯🇵</button>
+    <button id="btnCNY" onclick="switchCurrency('CNY')">🇨🇳</button>
+  </div>
 
-<!-- 人民幣 -->
-<div id="cnySection" class="section">
-  <label>原價（RMB¥）：</label>
-  <input type="text" id="rmbPrice" oninput="calculate()">
-  <label>現在匯率：</label>
-  <input type="text" id="exchangeRate" oninput="calculate()">
-  <label>手續費（%）：</label>
-  <input type="text" id="fee" oninput="calculate()">
-  <label>利潤（NTD$）：</label>
-  <input type="text" id="profit" oninput="calculate()">
-  <label>運費（NTD$）：</label>
-  <input type="text" id="shipping" oninput="calculate()">
-</div>
+  <!-- 日幣 -->
+  <div id="jpySection" class="section active">
+    <label>原價（¥）：</label>
+    <input type="text" id="yen" oninput="calculate()">
 
-<div class="result">
-  <p id="cost">成本：0</p>
-  <p id="price">售價：0</p>
-  <p id="profitResult">利潤：0</p>
-</div>
+    <label>現在匯率：</label>
+    <input type="text" id="currentRate" oninput="calculate()">
+
+    <label>代購匯率：</label>
+    <input type="text" id="agencyRate" oninput="calculate()">
+
+    <label>運費（NTD$）：</label>
+    <input type="text" id="shippingFee" oninput="calculate()">
+  </div>
+
+  <!-- 人民幣 -->
+  <div id="cnySection" class="section">
+    <label>原價（RMB¥）：</label>
+    <input type="text" id="rmbPrice" oninput="calculate()">
+
+    <label>現在匯率：</label>
+    <input type="text" id="exchangeRate" oninput="calculate()">
+
+    <label>手續費（%）：</label>
+    <input type="text" id="fee" oninput="calculate()">
+
+    <label>利潤（NTD$）：</label>
+    <input type="text" id="profit" oninput="calculate()">
+
+    <label>運費（NTD$）：</label>
+    <input type="text" id="shipping" oninput="calculate()">
+  </div>
+
+  <div class="result">
+    <p id="cost">成本：0</p>
+    <p id="price">售價：0</p>
+    <p id="profitResult">利潤：0</p>
+  </div>
 </div>
 
 <script>
 function switchCurrency(type){
-  document.getElementById("btnJPY").classList.remove("active");
-  document.getElementById("btnCNY").classList.remove("active");
-  document.getElementById("btn"+type).classList.add("active");
+  document.getElementById("btnJPY").classList.toggle("active", type==="JPY");
+  document.getElementById("btnCNY").classList.toggle("active", type==="CNY");
 
   document.getElementById("jpySection").classList.toggle("active", type==="JPY");
   document.getElementById("cnySection").classList.toggle("active", type==="CNY");
-  
+
   calculate();
 }
 
@@ -134,7 +154,7 @@ function calculate(){
     price = Math.ceil(yen * agencyRate + shippingFee);
     profit = Math.ceil(price - cost - shippingFee);
 
-  }else{
+  } else {
     const rmb = parseFloat(document.getElementById("rmbPrice").value)||0;
     const rate = parseFloat(document.getElementById("exchangeRate").value)||0;
     const fee = (parseFloat(document.getElementById("fee").value)||0)/100;
@@ -151,5 +171,6 @@ function calculate(){
   document.getElementById("profitResult").innerText = "利潤："+profit.toFixed(2);
 }
 </script>
+
 </body>
 </html>
