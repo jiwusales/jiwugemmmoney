@@ -80,7 +80,7 @@
 
     <!-- 日幣區塊 -->
     <div id="jpySection">
-      <label>原價（日幣 ¥）：</label>
+      <label>原價（¥）：</label>
       <input type="text" id="yen" oninput="calculate()">
 
       <label>現在匯率：</label>
@@ -89,7 +89,7 @@
       <label>代購匯率：</label>
       <input type="text" id="agencyRate" oninput="calculate()">
 
-      <label>運費 (NTD$)：</label>
+      <label>運費（NTD$）：</label>
       <input type="text" id="shippingFee" oninput="calculate()">
     </div>
 
@@ -114,6 +114,7 @@
     <div class="result">
       <p id="cost">成本：0</p>
       <p id="price">售價：0</p>
+      <p id="profitResult">利潤：0</p>
     </div>
   </div>
 
@@ -130,7 +131,7 @@
     }
 
     function calculate() {
-      let cost = 0, price = 0;
+      let cost = 0, price = 0, profit = 0;
 
       if (document.getElementById("jpySection").style.display === "block") {
         const yen = parseFloat(document.getElementById("yen").value) || 0;
@@ -138,22 +139,27 @@
         const agencyRate = parseFloat(document.getElementById("agencyRate").value) || 0;
         const shippingFee = parseFloat(document.getElementById("shippingFee").value) || 0;
 
+        // 日幣公式
         cost = Math.ceil(yen * currentRate);
         price = Math.ceil(yen * agencyRate + shippingFee);
+        profit = Math.ceil(price - cost - shippingFee);
 
       } else {
         const rmb = parseFloat(document.getElementById("rmbPrice").value) || 0;
         const rate = parseFloat(document.getElementById("exchangeRate").value) || 0;
         const fee = (parseFloat(document.getElementById("fee").value) || 0)/100;
-        const profit = parseFloat(document.getElementById("profit").value) || 0;
+        const profitInput = parseFloat(document.getElementById("profit").value) || 0;
         const shipping = parseFloat(document.getElementById("shipping").value) || 0;
 
+        // 人民幣公式
         cost = rmb * (1 + fee) * rate;
-        price = cost + shipping + profit;
+        price = cost + shipping + profitInput;
+        profit = profitInput;
       }
 
       document.getElementById("cost").innerText = "成本：" + cost.toFixed(2);
       document.getElementById("price").innerText = "售價：" + price.toFixed(2);
+      document.getElementById("profitResult").innerText = "利潤：" + profit.toFixed(2);
     }
   </script>
 </body>
