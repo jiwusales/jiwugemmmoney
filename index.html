@@ -1,29 +1,52 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>吉物錢錢計算機</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       font-family: Arial, sans-serif;
       background: #f9f9f9;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      padding: 20px;
       margin: 0;
     }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
     .calculator {
-      background: #fff;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
       padding: 20px;
+      background: #fff;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 320px;
+      min-height: 520px; /* ✅ 固定高度 */
     }
-    h2 {
-      text-align: center;
+    .mode-switch {
+      display: flex;
       margin-bottom: 15px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+    }
+    .mode-switch button {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      background: #f1f1f1;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .mode-switch button.active {
+      background: #fbcc7e; /* ✅ 柔和黃色，跟原本主色調一樣 */
+      font-weight: bold;
     }
     label {
       display: block;
@@ -31,121 +54,116 @@
     }
     input {
       width: 100%;
-      padding: 6px;
+      padding: 8px;
       margin-top: 5px;
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
       border-radius: 6px;
-    }
-    button {
-      margin-top: 15px;
-      width: 100%;
-      padding: 10px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
+      font-size: 16px;
     }
     .result {
-      margin-top: 15px;
-      padding: 10px;
+      margin-top: 20px;
+      padding: 15px;
       background: #f1f1f1;
-      border-radius: 6px;
+      border-radius: 8px;
     }
-    .mode-switch {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 15px;
-    }
-    .mode-switch button {
-      flex: 1;
-      margin: 0 3px;
-      background: #6c757d;
-    }
-    .mode-switch button.active {
-      background: #28a745;
+    .result p {
+      margin: 6px 0;
     }
   </style>
 </head>
 <body>
+  <h1>吉物錢錢計算機</h1>
   <div class="calculator">
-    <h2 id="title">日幣計算機</h2>
-
     <div class="mode-switch">
-      <button id="jpyMode" class="active" onclick="switchMode('jpy')">日幣</button>
-      <button id="cnyMode" onclick="switchMode('cny')">人民幣</button>
+      <button id="btnJPY" class="active" onclick="switchCurrency('JPY')">日幣</button>
+      <button id="btnCNY" onclick="switchCurrency('CNY')">人民幣</button>
     </div>
 
-    <div id="inputs"></div>
+    <!-- 日幣區塊 -->
+    <div id="jpySection">
+      <label>原價(日幣 ¥)：</label>
+      <input type="text" id="yen" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
 
-    <button onclick="calculate()">計算</button>
+      <label>現在匯率：</label>
+      <input type="text" id="currentRate" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
 
-    <div class="result" id="result"></div>
+      <label>代購匯率：</label>
+      <input type="text" id="agencyRate" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+
+      <label>運費(NTD$)：</label>
+      <input type="text" id="shippingFee" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+    </div>
+
+    <!-- 人民幣區塊 -->
+    <div id="cnySection" style="display:none;">
+      <label>原價(人民幣 ¥)：</label>
+      <input type="text" id="cny" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+
+      <label>手續費(%)：</label>
+      <input type="text" id="cnyFee" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+
+      <label>代購費(%)：</label>
+      <input type="text" id="cnyAgencyFee" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+
+      <label>現在匯率：</label>
+      <input type="text" id="cnyRateNow" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+
+      <label>代購匯率：</label>
+      <input type="text" id="cnyRateAgency" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+
+      <label>運費(NTD$)：</label>
+      <input type="text" id="cnyShippingFee" oninput="this.value=this.value.replace(/[^0-9.]/g,''); calculate()">
+    </div>
+
+    <div class="result">
+      <p><strong>成本：</strong><span id="cost">0</span> 元</p>
+      <p><strong>售價：</strong><span id="sale">0</span> 元</p>
+      <p><strong>利潤：</strong><span id="profit">0</span> 元</p>
+    </div>
   </div>
 
   <script>
-    let mode = "jpy";
+    function switchCurrency(type) {
+      document.getElementById("btnJPY").classList.remove("active");
+      document.getElementById("btnCNY").classList.remove("active");
+      document.getElementById("btn" + type).classList.add("active");
 
-    function switchMode(newMode) {
-      mode = newMode;
-      document.getElementById("jpyMode").classList.remove("active");
-      document.getElementById("cnyMode").classList.remove("active");
+      document.getElementById("jpySection").style.display = (type === "JPY") ? "block" : "none";
+      document.getElementById("cnySection").style.display = (type === "CNY") ? "block" : "none";
 
-      if (mode === "jpy") {
-        document.getElementById("title").innerText = "日幣計算機";
-        document.getElementById("jpyMode").classList.add("active");
-        document.getElementById("inputs").innerHTML = `
-          <label>日幣原價：</label><input type="number" id="price" placeholder="輸入日幣金額">
-          <label>匯率：</label><input type="number" id="rate" placeholder="例如 0.23">
-        `;
-      } else {
-        document.getElementById("title").innerText = "人民幣計算機";
-        document.getElementById("cnyMode").classList.add("active");
-        document.getElementById("inputs").innerHTML = `
-          <label>人民幣原價：</label><input type="number" id="price" placeholder="輸入人民幣金額">
-          <label>手續費 %：</label><input type="number" id="fee" placeholder="例如 2">
-          <label>代購費 %：</label><input type="number" id="agentFee" placeholder="例如 5">
-          <label>現在匯率：</label><input type="number" id="rateNow" placeholder="例如 4.5">
-          <label>代購匯率：</label><input type="number" id="rateAgent" placeholder="例如 4.6">
-          <label>運費 (台幣)：</label><input type="number" id="shipping" placeholder="輸入台幣金額">
-        `;
-      }
-      document.getElementById("result").innerHTML = "";
+      calculate();
     }
 
     function calculate() {
-      if (mode === "jpy") {
-        let price = parseFloat(document.getElementById("price").value) || 0;
-        let rate = parseFloat(document.getElementById("rate").value) || 0;
-        let cost = price * rate;
-        document.getElementById("result").innerHTML = `
-          <p>成本：${cost.toFixed(2)} 元</p>
-        `;
+      let cost = 0, sale = 0, profit = 0;
+
+      if (document.getElementById("jpySection").style.display === "block") {
+        const yen = parseFloat(document.getElementById("yen").value) || 0;
+        const currentRate = parseFloat(document.getElementById("currentRate").value) || 0;
+        const agencyRate = parseFloat(document.getElementById("agencyRate").value) || 0;
+        const shippingFee = parseFloat(document.getElementById("shippingFee").value) || 0;
+
+        cost = Math.ceil(yen * currentRate);
+        sale = Math.ceil(yen * agencyRate);
+        profit = Math.ceil(sale - cost - shippingFee);
+
       } else {
-        let price = parseFloat(document.getElementById("price").value) || 0;
-        let fee = (parseFloat(document.getElementById("fee").value) || 0) / 100;
-        let agentFee = (parseFloat(document.getElementById("agentFee").value) || 0) / 100;
-        let rateNow = parseFloat(document.getElementById("rateNow").value) || 0;
-        let rateAgent = parseFloat(document.getElementById("rateAgent").value) || 0;
-        let shipping = parseFloat(document.getElementById("shipping").value) || 0;
+        const cny = parseFloat(document.getElementById("cny").value) || 0;
+        const cnyFee = (parseFloat(document.getElementById("cnyFee").value) || 0) / 100;
+        const cnyAgencyFee = (parseFloat(document.getElementById("cnyAgencyFee").value) || 0) / 100;
+        const cnyRateNow = parseFloat(document.getElementById("cnyRateNow").value) || 0;
+        const cnyRateAgency = parseFloat(document.getElementById("cnyRateAgency").value) || 0;
+        const cnyShippingFee = parseFloat(document.getElementById("cnyShippingFee").value) || 0;
 
-        let cost = price * (1 + fee) * rateNow;
-        let sell = price * (1 + fee + agentFee) * rateAgent;
-        let profit = sell - cost - shipping;
-
-        document.getElementById("result").innerHTML = `
-          <p>成本：${cost.toFixed(2)} 元</p>
-          <p>售價：${sell.toFixed(2)} 元</p>
-          <p>利潤：${profit.toFixed(2)} 元</p>
-        `;
+        cost = Math.ceil(cny * (1 + cnyFee) * cnyRateNow);
+        sale = Math.ceil(cny * (1 + cnyFee + cnyAgencyFee) * cnyRateAgency);
+        profit = Math.ceil(sale - cost - cnyShippingFee);
       }
-    }
 
-    // 預設日幣模式
-    switchMode("jpy");
+      document.getElementById("cost").textContent = cost;
+      document.getElementById("sale").textContent = sale;
+      document.getElementById("profit").textContent = profit;
+    }
   </script>
 </body>
 </html>
