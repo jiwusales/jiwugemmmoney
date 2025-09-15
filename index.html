@@ -23,6 +23,8 @@
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      min-height: 520px; /* 固定高度 */
+      position: relative;
     }
     h1 {
       text-align: center;
@@ -67,6 +69,22 @@
       border-radius: 8px;
     }
     .result p { margin: 6px 0; }
+
+    /* 固定內容區塊 */
+    #jpySection, #cnySection {
+      position: absolute;
+      top: 90px;
+      left: 20px;
+      right: 20px;
+      transition: opacity 0.2s;
+    }
+    #jpySection.hidden, #cnySection.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #jpySection:not(.hidden), #cnySection:not(.hidden) {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -94,7 +112,7 @@
     </div>
 
     <!-- 人民幣區塊 -->
-    <div id="cnySection" style="display:none;">
+    <div id="cnySection" class="hidden">
       <label>原價（RMB¥）：</label>
       <input type="text" id="rmbPrice" oninput="calculate()">
 
@@ -124,8 +142,8 @@
       document.getElementById("btnCNY").classList.remove("active");
       document.getElementById("btn" + type).classList.add("active");
 
-      document.getElementById("jpySection").style.display = (type === "JPY") ? "block" : "none";
-      document.getElementById("cnySection").style.display = (type === "CNY") ? "block" : "none";
+      document.getElementById("jpySection").classList.toggle("hidden", type !== "JPY");
+      document.getElementById("cnySection").classList.toggle("hidden", type !== "CNY");
 
       calculate();
     }
@@ -133,13 +151,12 @@
     function calculate() {
       let cost = 0, price = 0, profit = 0;
 
-      if (document.getElementById("jpySection").style.display === "block") {
+      if (document.getElementById("jpySection").classList.contains("hidden") === false) {
         const yen = parseFloat(document.getElementById("yen").value) || 0;
         const currentRate = parseFloat(document.getElementById("currentRate").value) || 0;
         const agencyRate = parseFloat(document.getElementById("agencyRate").value) || 0;
         const shippingFee = parseFloat(document.getElementById("shippingFee").value) || 0;
 
-        // 日幣公式
         cost = Math.ceil(yen * currentRate);
         price = Math.ceil(yen * agencyRate + shippingFee);
         profit = Math.ceil(price - cost - shippingFee);
@@ -151,7 +168,6 @@
         const profitInput = parseFloat(document.getElementById("profit").value) || 0;
         const shipping = parseFloat(document.getElementById("shipping").value) || 0;
 
-        // 人民幣公式
         cost = rmb * (1 + fee) * rate;
         price = cost + shipping + profitInput;
         profit = profitInput;
