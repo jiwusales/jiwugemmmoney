@@ -116,7 +116,7 @@
   <div id="cnySection" class="section">
     <label>原價（RMB¥）：</label>
     <input type="text" id="rmbPrice" oninput="calculate()">
-    <label>匯率：</label>
+    <label>現在匯率：</label>
     <input type="text" id="exchangeRate" oninput="calculate()">
     <label>手續費（%）：</label>
     <input type="text" id="fee" oninput="calculate()">
@@ -128,7 +128,7 @@
   <div id="krwSection" class="section">
     <label>原價（₩）：</label>
     <input type="text" id="krwPrice" oninput="calculate()">
-    <label>匯率：</label>
+    <label>現在匯率：</label>
     <input type="text" id="krwCurrentRate" oninput="calculate()">
     <label>手續費（%）：</label>
     <input type="text" id="krwFee" oninput="calculate()">
@@ -139,6 +139,7 @@
   <div class="result">
     <p id="cost">成本：0</p>
     <p id="price">售價：0</p>
+    <p id="profitResult">利潤：0</p>
   </div>
 </div>
 
@@ -159,7 +160,7 @@ function switchCurrency(type){
 }
 
 function calculate(){
-  let cost = 0, price = 0;
+  let cost = 0, price = 0, profit = 0;
 
   const jpyActive = document.getElementById("jpySection").classList.contains("active");
   const cnyActive = document.getElementById("cnySection").classList.contains("active");
@@ -173,6 +174,7 @@ function calculate(){
 
     cost = Math.ceil(yen * currentRate);
     price = Math.ceil(yen * agencyRate + shippingFee);
+    profit = Math.ceil(price - cost - shippingFee);
 
   } else if(cnyActive){
     const rmb = parseFloat(document.getElementById("rmbPrice").value) || 0;
@@ -182,6 +184,7 @@ function calculate(){
 
     cost = Math.ceil(rmb * (1 + fee) * rate);
     price = Math.ceil(cost + shipping);
+    profit = null;
 
   } else if(krwActive){
     const krwPrice = parseFloat(document.getElementById("krwPrice").value) || 0;
@@ -189,13 +192,21 @@ function calculate(){
     const krwFee = (parseFloat(document.getElementById("krwFee").value) || 0) / 100;
     const krwShippingFee = parseFloat(document.getElementById("krwShippingFee").value) || 0;
 
-    // 韓元計算邏輯：除法
-    cost = Math.ceil(krwPrice * (1 + krwFee) / krwCurrentRate); // 原價 * (1 + 手續費%) ÷ 現在匯率
-    price = Math.ceil(krwPrice * (1 + krwFee) / krwCurrentRate + krwShippingFee); // 售價計算
+    if(krwPrice === 0 || krwCurrentRate === 0) {
+      // 如果沒有輸入原價或匯率，則不計算並顯示0
+      cost = 0;
+      price = 0;
+    } else {
+      // 韓元計算邏輯：除法
+      cost = Math.ceil(krwPrice * (1 + krwFee) / krwCurrentRate);
+      price = Math.ceil(krwPrice * (1 + krwFee) / krwCurrentRate + krwShippingFee);
+    }
   }
 
-  document.getElementById("cost").innerText = "成本：" + cost;
-  document.getElementById("price").innerText = "售價：" + price;
+  // 更新結果
+  document.getElementById("cost").innerText = "成本：" + (isNaN(cost) ? 0 : cost);
+  document.getElementById("price").innerText = "售價：" + (isNaN(price) ? 0 : price);
+  document.getElementById("profitResult").innerText = "利潤：" + (isNaN(profit) ? 0 : profit || '無');
 }
 </script>
 </body>
