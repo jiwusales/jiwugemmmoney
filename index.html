@@ -209,8 +209,9 @@ document.getElementById("cost").innerText = "成本：" + (isFinite(cost) ? Math
 document.getElementById("price").innerText = "售價：" + (isFinite(price) ? Math.ceil(price) : 0);
 
 // 只有日本顯示利潤，其它清空
-const jpyActive = document.getElementById("jpySection").classList.contains("active");
-document.getElementById("profitResult").innerText = jpyActive ? "利潤：" + (isFinite(profit) ? Math.ceil(profit) : 0) : "";
+document.getElementById("profitResult").innerText = jpyActive
+  ? "利潤：" + (isFinite(profit) ? Math.ceil(profit) : 0)
+  : "";
 }
 </script>
 </body>
