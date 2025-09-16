@@ -100,7 +100,7 @@
     <button id="btnKRW" onclick="switchCurrency('KRW')">🇰🇷</button>
   </div>
 
-  <!-- 日幣 -->
+  <!-- 日本 -->
   <div id="jpySection" class="section active">
     <label>原價（¥）：</label>
     <input type="text" id="yen" oninput="calculate()">
@@ -112,7 +112,7 @@
     <input type="text" id="shippingFee" oninput="calculate()">
   </div>
 
-  <!-- 人民幣 -->
+  <!-- 中國 -->
   <div id="cnySection" class="section">
     <label>原價（RMB¥）：</label>
     <input type="text" id="rmbPrice" oninput="calculate()">
@@ -120,11 +120,13 @@
     <input type="text" id="exchangeRate" oninput="calculate()">
     <label>手續費（%）：</label>
     <input type="text" id="fee" oninput="calculate()">
+    <label>利潤（NTD$）：</label>
+    <input type="text" id="cnyProfit" oninput="calculate()">
     <label>運費（NTD$）：</label>
     <input type="text" id="shipping" oninput="calculate()">
   </div>
 
-  <!-- 韓元 -->
+  <!-- 韓國 -->
   <div id="krwSection" class="section">
     <label>原價（₩）：</label>
     <input type="text" id="krwPrice" oninput="calculate()">
@@ -171,18 +173,21 @@ function calculate(){
     const agencyRate = parseFloat(document.getElementById("agencyRate").value) || 0;
     const shippingFee = parseFloat(document.getElementById("shippingFee").value) || 0;
 
+    // 日本公式
     cost = yen * currentRate;
-    price = yen * agencyRate + shippingFee;
+    price = yen * agencyRate;
     profit = price - cost - shippingFee;
 
   } else if(cnyActive){
     const rmb = parseFloat(document.getElementById("rmbPrice").value) || 0;
     const rate = parseFloat(document.getElementById("exchangeRate").value) || 0;
     const fee = (parseFloat(document.getElementById("fee").value) || 0) / 100;
+    const cnyProfit = parseFloat(document.getElementById("cnyProfit").value) || 0;
     const shipping = parseFloat(document.getElementById("shipping").value) || 0;
 
+    // 中國公式
     cost = rmb * (1 + fee) * rate;
-    price = cost + shipping;
+    price = cost + cnyProfit + shipping;
     profit = price - cost - shipping;
 
   } else if(krwActive){
@@ -192,12 +197,12 @@ function calculate(){
     const krwProfit = parseFloat(document.getElementById("krwProfit").value) || 0;
     const krwShippingFee = parseFloat(document.getElementById("krwShippingFee").value) || 0;
 
+    // 韓國公式
     if (krwCurrentRate > 0) {
       cost = (krwPrice * (1 + krwFee)) / krwCurrentRate;
-      price = (krwPrice * (1 + krwFee)) / krwCurrentRate + krwProfit + krwShippingFee;
+      price = cost + krwProfit + krwShippingFee;
+      profit = price - cost - krwShippingFee;
     }
-
-    profit = price - cost - krwShippingFee;
   }
 
   document.getElementById("cost").innerText = "成本：" + (isFinite(cost) ? Math.ceil(cost) : 0);
