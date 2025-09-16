@@ -47,25 +47,27 @@
       margin-bottom: 20px;
     }
 
-    .mode-switch button {
-      font-size: 24px;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: none;
-      cursor: pointer;
-      background: #f9f9f9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-    }
+   .mode-switch button {
+  font-size: 24px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #ddd; /* 預設邊框 */
+  cursor: pointer;
+  background: #f9f9f9;   /* 背景保持白色 */
+  color: #333;            /* 文字顏色 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
 
-    .mode-switch button.active {
-      background: #fbcc7e;
-      color: #fff;
-    }
-
+.mode-switch button.active {
+  border: 2px solid #fbcc7e; /* 選中時邊框顏色 */
+  background: #f9f9f9;       /* 背景不變 */
+  color: #fbcc7e;            /* 文字改成邊框色，也可以保留白色 */
+}
+    
     label { display: block; margin-top: 10px; }
     input {
       width: 100%;
