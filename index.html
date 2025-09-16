@@ -132,8 +132,10 @@
     <input type="text" id="krwPrice" oninput="calculate()">
     <label>現在匯率：</label>
     <input type="text" id="krwCurrentRate" oninput="calculate()">
-    <label>代購匯率：</label>
-    <input type="text" id="krwAgencyRate" oninput="calculate()">
+    <label>手續費（%）：</label>
+    <input type="text" id="krwFee" oninput="calculate()">
+    <label>利潤（NTD$）：</label>
+    <input type="text" id="krwProfit" oninput="calculate()">
     <label>運費（NTD$）：</label>
     <input type="text" id="krwShippingFee" oninput="calculate()">
   </div>
@@ -191,12 +193,14 @@ function calculate(){
   } else if(krwActive){
     const krwPrice = parseFloat(document.getElementById("krwPrice").value) || 0;
     const krwCurrentRate = parseFloat(document.getElementById("krwCurrentRate").value) || 0;
-    const krwAgencyRate = parseFloat(document.getElementById("krwAgencyRate").value) || 0;
+    const krwFee = (parseFloat(document.getElementById("krwFee").value) || 0) / 100;
+    const krwProfit = parseFloat(document.getElementById("krwProfit").value) || 0;
     const krwShippingFee = parseFloat(document.getElementById("krwShippingFee").value) || 0;
 
     // 韓元計算邏輯：除法
-    cost = Math.ceil(krwPrice / krwCurrentRate); // 原價除以現在匯率
-    price = Math.ceil(krwPrice / krwAgencyRate + krwShippingFee); // 原價除以代購匯率，再加上運費
+    cost = Math.ceil(krwPrice * (1 + krwFee) / krwCurrentRate); // 原價 * (1 + 手續費%) ÷ 現在匯率
+    price = Math.ceil(krwPrice * (1 + krwFee) / krwCurrentRate + krwProfit + krwShippingFee); // 售價計算
+
     profit = Math.ceil(price - cost - krwShippingFee); // 利潤
   }
 
