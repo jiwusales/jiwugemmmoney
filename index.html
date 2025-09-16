@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <!-- 啟用 iOS Web App 模式 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <!-- 這裡設為透明黑色-->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#fbcc7e">
 
   <title>吉物錢錢計算機</title>
@@ -19,10 +19,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 20px; /* 頂部留白 */
+      padding-top: 20px;
     }
 
-    /* 標題 */
     h1 {
       margin: 0 0 20px 0;
       font-size: 20px;
@@ -30,26 +29,25 @@
       color: #333;
     }
 
-    /* 卡片 */
     .calculator {
       max-width: 400px;
       width: 90%;
       background: #fff;
       border-radius: 12px;
-      padding: 30px; /* 統一上下左右留白 */
+      padding: 30px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       min-height: 520px;
       display: flex;
       flex-direction: column;
     }
 
-    /* 切換按鈕 */
     .mode-switch {
       display: flex;
       justify-content: center;
       gap: 20px;
       margin-bottom: 20px;
     }
+
     .mode-switch button {
       font-size: 24px;
       width: 50px;
@@ -63,12 +61,12 @@
       justify-content: center;
       transition: background 0.2s;
     }
+
     .mode-switch button.active {
       background: #555;
       color: #fff;
     }
 
-    /* 輸入欄位 */
     label { display: block; margin-top: 10px; }
     input {
       width: 100%;
@@ -79,16 +77,15 @@
       font-size: 16px;
     }
 
-    /* 結果區 */
     .result {
       margin-top: 20px;
       padding: 15px;
       background: #f1f1f1;
       border-radius: 8px;
     }
+
     .result p { margin: 6px 0; }
 
-    /* 幣種區塊 */
     .section { display: none; }
     .section.active { display: block; }
   </style>
@@ -101,20 +98,17 @@
   <div class="mode-switch">
     <button id="btnJPY" class="active" onclick="switchCurrency('JPY')">🇯🇵</button>
     <button id="btnCNY" onclick="switchCurrency('CNY')">🇨🇳</button>
-    <button id="btnKRW" onclick="switchCurrency('KRW')">🇰🇷</button> <!-- 新增韓元按鈕 -->
+    <button id="btnKRW" onclick="switchCurrency('KRW')">🇰🇷</button>
   </div>
 
   <!-- 日幣 -->
   <div id="jpySection" class="section active">
     <label>原價（¥）：</label>
     <input type="text" id="yen" oninput="calculate()">
-
     <label>現在匯率：</label>
     <input type="text" id="currentRate" oninput="calculate()">
-
     <label>代購匯率：</label>
     <input type="text" id="agencyRate" oninput="calculate()">
-
     <label>運費（NTD$）：</label>
     <input type="text" id="shippingFee" oninput="calculate()">
   </div>
@@ -123,16 +117,12 @@
   <div id="cnySection" class="section">
     <label>原價（RMB¥）：</label>
     <input type="text" id="rmbPrice" oninput="calculate()">
-
     <label>現在匯率：</label>
     <input type="text" id="exchangeRate" oninput="calculate()">
-
     <label>手續費（%）：</label>
     <input type="text" id="fee" oninput="calculate()">
-
     <label>利潤（NTD$）：</label>
     <input type="text" id="profit" oninput="calculate()">
-
     <label>運費（NTD$）：</label>
     <input type="text" id="shipping" oninput="calculate()">
   </div>
@@ -141,13 +131,10 @@
   <div id="krwSection" class="section">
     <label>原價（₩）：</label>
     <input type="text" id="krwPrice" oninput="calculate()">
-
     <label>現在匯率：</label>
     <input type="text" id="krwCurrentRate" oninput="calculate()">
-
     <label>代購匯率：</label>
     <input type="text" id="krwAgencyRate" oninput="calculate()">
-
     <label>運費（NTD$）：</label>
     <input type="text" id="krwShippingFee" oninput="calculate()">
   </div>
@@ -161,45 +148,60 @@
 
 <script>
 function switchCurrency(type){
-  document.getElementById("btnJPY").classList.toggle("active", type==="JPY");
-  document.getElementById("btnCNY").classList.toggle("active", type==="CNY");
-  document.getElementById("btnKRW").classList.toggle("active", type==="KRW"); // 新增切換韓元按鈕
+  document.getElementById("btnJPY").classList.toggle("active", type === "JPY");
+  document.getElementById("btnCNY").classList.toggle("active", type === "CNY");
+  document.getElementById("btnKRW").classList.toggle("active", type === "KRW");
 
-  document.getElementById("jpySection").classList.toggle("active", type==="JPY");
-  document.getElementById("cnySection").classList.toggle("active", type==="CNY");
-  document.getElementById("krwSection").classList.toggle("active", type==="KRW"); // 新增切換韓元區域
+  document.getElementById("jpySection").classList.toggle("active", type === "JPY");
+  document.getElementById("cnySection").classList.toggle("active", type === "CNY");
+  document.getElementById("krwSection").classList.toggle("active", type === "KRW");
 
   calculate();
 }
 
 function calculate(){
-  let cost=0, price=0, profit=0;
+  let cost = 0, price = 0, profit = 0;
 
   const jpyActive = document.getElementById("jpySection").classList.contains("active");
   const cnyActive = document.getElementById("cnySection").classList.contains("active");
-  const krwActive = document.getElementById("krwSection").classList.contains("active"); // 判斷韓元區域是否顯示
+  const krwActive = document.getElementById("krwSection").classList.contains("active");
 
   if(jpyActive){
-    const yen = parseFloat(document.getElementById("yen").value)||0;
-    const currentRate = parseFloat(document.getElementById("currentRate").value)||0;
-    const agencyRate = parseFloat(document.getElementById("agencyRate").value)||0;
-    const shippingFee = parseFloat(document.getElementById("shippingFee").value)||0;
+    const yen = parseFloat(document.getElementById("yen").value) || 0;
+    const currentRate = parseFloat(document.getElementById("currentRate").value) || 0;
+    const agencyRate = parseFloat(document.getElementById("agencyRate").value) || 0;
+    const shippingFee = parseFloat(document.getElementById("shippingFee").value) || 0;
 
     cost = Math.ceil(yen * currentRate);
     price = Math.ceil(yen * agencyRate + shippingFee);
     profit = Math.ceil(price - cost - shippingFee);
 
   } else if(cnyActive){
-    const rmb = parseFloat(document.getElementById("rmbPrice").value)||0;
-    const rate = parseFloat(document.getElementById("exchangeRate").value)||0;
-    const fee = (parseFloat(document.getElementById("fee").value)||0)/100;
-    const shipping = parseFloat(document.getElementById("shipping").value)||0;
+    const rmb = parseFloat(document.getElementById("rmbPrice").value) || 0;
+    const rate = parseFloat(document.getElementById("exchangeRate").value) || 0;
+    const fee = (parseFloat(document.getElementById("fee").value) || 0) / 100;
+    const shipping = parseFloat(document.getElementById("shipping").value) || 0;
 
-    cost = Math.ceil(rmb*(1+fee)*rate);
+    cost = Math.ceil(rmb * (1 + fee) * rate);
     price = Math.ceil(cost + shipping);
-    profit = null; // 人民幣不顯示利潤
+    profit = null; 
 
   } else if(krwActive){
-    const krwPrice = parseFloat(document.getElementById("krwPrice").value)||0;
-    const krwCurrentRate = parseFloat(document.getElementById("krwCurrentRate").value)||0;
-    const krwAgencyRate = parseFloat(document.getElementById("krwAgency
+    const krwPrice = parseFloat(document.getElementById("krwPrice").value) || 0;
+    const krwCurrentRate = parseFloat(document.getElementById("krwCurrentRate").value) || 0;
+    const krwAgencyRate = parseFloat(document.getElementById("krwAgencyRate").value) || 0;
+    const krwShippingFee = parseFloat(document.getElementById("krwShippingFee").value) || 0;
+
+    cost = Math.ceil(krwPrice * krwCurrentRate);
+    price = Math.ceil(krwPrice * krwAgencyRate + krwShippingFee);
+    profit = Math.ceil(price - cost - krwShippingFee);
+  }
+
+  document.getElementById("cost").innerText = "成本：" + cost;
+  document.getElementById("price").innerText = "售價：" + price;
+  document.getElementById("profitResult").innerText = "利潤：" + (profit || '無');
+}
+</script>
+
+</body>
+</html>
