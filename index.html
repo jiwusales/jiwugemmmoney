@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <!-- 啟用 iOS Web App 模式 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#fbcc7e">
@@ -147,6 +146,21 @@
 </div>
 
 <script>
+function switchCurrency(type){
+  // 切換按鈕的 active 樣式
+  document.getElementById("btnJPY").classList.toggle("active", type === "JPY");
+  document.getElementById("btnCNY").classList.toggle("active", type === "CNY");
+  document.getElementById("btnKRW").classList.toggle("active", type === "KRW");
+
+  // 切換顯示區域
+  document.getElementById("jpySection").classList.toggle("active", type === "JPY");
+  document.getElementById("cnySection").classList.toggle("active", type === "CNY");
+  document.getElementById("krwSection").classList.toggle("active", type === "KRW");
+
+  // 執行計算
+  calculate();
+}
+
 function calculate(){
   let cost = 0, price = 0, profit = 0;
 
