@@ -183,7 +183,7 @@ function calculate(){
 
     cost = rmb * (1 + fee) * rate;
     price = cost + shipping;
-    profit = null;
+    profit = price - cost - shipping;
 
   } else if(krwActive){
     const krwPrice = parseFloat(document.getElementById("krwPrice").value) || 0;
@@ -197,7 +197,7 @@ function calculate(){
       price = (krwPrice * (1 + krwFee)) / krwCurrentRate + krwProfit + krwShippingFee;
     }
 
-    profit = null;
+    profit = price - cost - krwShippingFee;
   }
 
   document.getElementById("cost").innerText = "成本：" + (isFinite(cost) ? Math.ceil(cost) : 0);
